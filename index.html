@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0A0A0A">
+<title>Hyrox Open · Vinicius</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0A0A;
+  --bg-1: #141414;
+  --bg-2: #1C1C1C;
+  --bg-3: #262626;
+  --border: #2A2A2A;
+  --border-strong: #3D3D3D;
+  --text: #FAFAFA;
+  --text-2: #B5B5B5;
+  --text-3: #6E6E6E;
+  --accent: #DC2626;
+  --accent-soft: #DC262615;
+  --success: #22C55E;
+  --warning: #EAB308;
+  --info: #3B82F6;
+  --partial: #F97316;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'Bricolage Grotesque', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ===== HEADER ===== */
+.hdr {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 20px 16px;
+}
+.hdr-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.hdr-left h1 {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.hdr-left h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.hdr-left .sub {
+  font-size: 11px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 6px;
+  font-weight: 500;
+}
+.countdown {
+  text-align: right;
+  font-family: var(--mono);
+}
+.countdown .num {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text);
+  font-feature-settings: "tnum";
+}
+.countdown .lbl {
+  font-size: 9px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ===== PROGRESS BAR (overall) ===== */
+.overall-bar {
+  height: 3px;
+  background: var(--bg-2);
+  border-radius: 2px;
+  margin-top: 14px;
+  overflow: hidden;
+  position: relative;
+}
+.overall-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.overall-bar-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--text-3);
+  font-feature-settings: "tnum";
+}
+
+/* ===== MAIN ===== */
+.main { padding: 24px 16px 100px; max-width: 720px; margin: 0 auto; }
+
+.section-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-3);
+  font-weight: 600;
+  margin: 28px 4px 14px;
+}
+.section-label:first-child { margin-top: 0; }
+
+/* ===== WEEK CARD ===== */
+.week-card {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.week-card.active { border-color: var(--border-strong); }
+.week-card:active { transform: scale(0.998); }
+
+.week-head {
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.week-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 38px;
+  line-height: 0.85;
+  color: var(--text-3);
+  min-width: 38px;
+  font-weight: 400;
+}
+.week-card.has-data .week-num { color: var(--text); }
+.week-card.complete .week-num { color: var(--accent); }
+
+.week-info { flex: 1; min-width: 0; }
+.week-title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.week-meta {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-feature-settings: "tnum";
+}
+
+.week-progress {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.week-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bg-3);
+  transition: background 0.2s;
+}
+.week-dot.done { background: var(--success); }
+.week-dot.partial { background: var(--partial); }
+.week-dot.skipped { background: var(--text-3); opacity: 0.4; }
+
+.chevron {
+  width: 20px;
+  height: 20px;
+  color: var(--text-3);
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+.week-card.open .chevron { transform: rotate(90deg); }
+
+.week-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.week-card.open .week-body { max-height: 2000px; }
+
+.day-list { padding: 0 8px 12px; }
+
+.day-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 12px;
+  margin: 2px 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s;
+  gap: 12px;
+  position: relative;
+}
+.day-item:hover { background: var(--bg-2); }
+.day-item:active { background: var(--bg-3); }
+
+.day-status {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--bg-2);
+  border: 1.5px solid var(--border-strong);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-3);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.day-item.done .day-status {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+.day-item.partial .day-status {
+  background: var(--partial);
+  border-color: var(--partial);
+  color: white;
+}
+.day-item.skipped .day-status {
+  background: transparent;
+  border-color: var(--text-3);
+  border-style: dashed;
+  color: var(--text-3);
+}
+.day-item.off .day-status {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-3);
+}
+
+.day-info { flex: 1; min-width: 0; }
+.day-name {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.day-type {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 2px;
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.day-type.tt-forca { color: var(--warning); }
+.day-type.tt-corrida { color: var(--info); }
+.day-type.tt-hyrox { color: var(--accent); }
+
+.day-arrow {
+  color: var(--text-3);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* week footer */
+.week-footer {
+  padding: 6px 12px 16px;
+  border-top: 1px dashed var(--border);
+  margin-top: 6px;
+}
+.btn-summary {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-summary:hover { background: var(--bg-2); border-color: var(--accent); }
+.btn-summary svg { width: 14px; height: 14px; }
+
+/* ===== MODAL ===== */
+.modal-bg {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+  overflow-y: auto;
+}
+.modal-bg.open { display: flex; opacity: 1; }
+.modal-bg.flex-end { align-items: flex-end; }
+
+.modal {
+  background: var(--bg-1);
+  border-radius: var(--radius) var(--radius) 0 0;
+  border-top: 1px solid var(--border-strong);
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  max-height: 96vh;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.modal-bg.open .modal { transform: translateY(0); }
+
+@media (min-width: 768px) {
+  .modal-bg { align-items: center; padding: 20px; }
+  .modal { border-radius: var(--radius); border: 1px solid var(--border-strong); max-height: 90vh; }
+}
+
+.modal-grip {
+  width: 36px; height: 4px;
+  background: var(--border-strong);
+  border-radius: 4px;
+  margin: 10px auto 0;
+  flex-shrink: 0;
+}
+
+.modal-head {
+  padding: 16px 20px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+}
+.modal-title {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.modal-subtitle {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-feature-settings: "tnum";
+}
+.modal-close {
+  background: var(--bg-2);
+  border: none;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.modal-close:hover { background: var(--bg-3); }
+
+.modal-body {
+  padding: 18px 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ===== TRAINING CONTENT ===== */
+.train-section {
+  margin-bottom: 18px;
+}
+.train-section:last-child { margin-bottom: 0; }
+.train-sub {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.train-sub::before {
+  content: '';
+  width: 16px; height: 1px;
+  background: var(--accent);
+}
+.train-list {
+  list-style: none;
+}
+.train-list li {
+  padding: 7px 0 7px 18px;
+  position: relative;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--border);
+}
+.train-list li:last-child { border-bottom: none; }
+.train-list li::before {
+  content: '';
+  position: absolute;
+  left: 4px; top: 16px;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--text-3);
+}
+
+.local-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 12px;
+}
+.local-tag.pista { color: var(--info); border-color: #3B82F640; }
+.local-tag.academia { color: var(--warning); border-color: #EAB30840; }
+.local-tag.misto { color: var(--accent); border-color: #DC262640; }
+
+.off-msg {
+  text-align: center;
+  padding: 40px 20px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--text-3);
+}
+
+/* ===== REGISTRO FORM ===== */
+.reg-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 2px solid var(--border-strong);
+}
+.reg-section .train-sub { color: var(--success); }
+.reg-section .train-sub::before { background: var(--success); }
+
+.status-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.status-btn {
+  background: var(--bg-2);
+  border: 1.5px solid var(--border);
+  color: var(--text-2);
+  padding: 12px 6px;
+  border-radius: var(--radius-sm);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.status-btn:hover { border-color: var(--border-strong); }
+.status-btn.active.done {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+.status-btn.active.partial {
+  background: var(--partial);
+  border-color: var(--partial);
+  color: white;
+}
+.status-btn.active.skipped {
+  background: var(--text-3);
+  border-color: var(--text-3);
+  color: var(--bg);
+}
+.status-btn .ico { font-size: 18px; line-height: 1; }
+
+.field {
+  margin-bottom: 14px;
+}
+.field-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-3);
+  font-weight: 600;
+  margin-bottom: 7px;
+  display: block;
+}
+.field-input, .field-textarea {
+  width: 100%;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--sans);
+  font-size: 14px;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+}
+.field-input:focus, .field-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.field-textarea {
+  resize: vertical;
+  min-height: 70px;
+  font-family: var(--sans);
+}
+.field-input.mono { font-family: var(--mono); font-feature-settings: "tnum"; }
+
+.rpe-row {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  gap: 4px;
+}
+.rpe-btn {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  padding: 8px 0;
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.rpe-btn:hover { border-color: var(--border-strong); }
+.rpe-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+.rpe-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-3);
+  margin-top: 6px;
+  text-align: center;
+}
+
+.field-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn-save {
+  width: 100%;
+  background: var(--accent);
+  border: none;
+  color: white;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 16px;
+  letter-spacing: 0.02em;
+}
+.btn-save:hover { background: #B91C1C; }
+.btn-save:active { transform: scale(0.99); }
+
+.save-note {
+  font-size: 11px;
+  color: var(--text-3);
+  text-align: center;
+  margin-top: 10px;
+  font-family: var(--mono);
+}
+
+/* ===== SUMMARY MODAL ===== */
+.summary-content {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text-2);
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.summary-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+.btn-secondary {
+  background: var(--bg-2);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-secondary:hover { background: var(--bg-3); }
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--text);
+  color: var(--bg);
+  padding: 12px 22px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 200;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: var(--sans);
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* footer */
+.footer {
+  text-align: center;
+  padding: 40px 20px 20px;
+  color: var(--text-3);
+  font-size: 11px;
+  font-family: var(--mono);
+}
+.footer .quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--text-2);
+  margin-bottom: 8px;
+}
+
+/* aderência display */
+.adherence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  background: var(--bg-2);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+}
+.adh-stat { text-align: center; }
+.adh-num {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 700;
+  font-feature-settings: "tnum";
+}
+.adh-num.success { color: var(--success); }
+.adh-num.partial { color: var(--partial); }
+.adh-lbl {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-3);
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+/* phase indicator */
+.phase-pill {
+  display: inline-block;
+  padding: 3px 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 100px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  margin-top: 8px;
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-row">
+    <div class="hdr-left">
+      <h1>HYROX <em>Open</em></h1>
+      <div class="sub">Vinicius · Botucatu</div>
+      <div class="phase-pill" id="phasePill">Fase 1 · Base</div>
+    </div>
+    <div class="countdown">
+      <div class="num" id="countdownNum">—</div>
+      <div class="lbl">dias até a prova</div>
+    </div>
+  </div>
+  <div class="overall-bar"><div class="overall-bar-fill" id="overallFill"></div></div>
+  <div class="overall-bar-meta">
+    <span id="adhText">— sessões</span>
+    <span id="datesText">04 mai → 14 jun</span>
+  </div>
+</header>
+
+<main class="main">
+  <div class="section-label">Fase 1 — 6 semanas</div>
+  <div id="weekList"></div>
+
+  <footer class="footer">
+    <div class="quote">"Disciplina nos paces<br>&gt; heroísmo nos longões"</div>
+    <div>17 de outubro de 2026 · prova</div>
+  </footer>
+</main>
+
+<!-- Day modal -->
+<div class="modal-bg flex-end" id="dayModal">
+  <div class="modal">
+    <div class="modal-grip"></div>
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="dayTitle">—</div>
+        <div class="modal-subtitle" id="daySubtitle">—</div>
+      </div>
+      <button class="modal-close" onclick="closeDayModal()">×</button>
+    </div>
+    <div class="modal-body" id="dayBody"></div>
+  </div>
+</div>
+
+<!-- Summary modal -->
+<div class="modal-bg flex-end" id="sumModal">
+  <div class="modal">
+    <div class="modal-grip"></div>
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">Resumo da semana</div>
+        <div class="modal-subtitle" id="sumSubtitle">—</div>
+      </div>
+      <button class="modal-close" onclick="closeSumModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="adherence-grid" id="sumAdherence"></div>
+      <div class="summary-content" id="sumContent">—</div>
+      <div class="summary-actions">
+        <button class="btn-secondary" onclick="copySum()">Copiar</button>
+        <button class="btn-secondary" onclick="shareSum()">Compartilhar</button>
+      </div>
+      <div class="save-note">cola esse texto no chat com Claude</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Salvo</div>
+
+<script>
+// ==================== DADOS DO PLANO ====================
+const PROVA_DATE = new Date('2026-10-17');
+const PLAN = [
+  {
+    n: 1, title: 'Adaptação inicial',
+    dates: '04 mai → 10 mai', volume: '20 km',
+    note: 'Foco em respeitar paces e padrões. Vai parecer fácil — é proposital. Volume zerado exige adaptação de tendões.',
+    days: [
+      { d: 'Seg 04/05', name: 'Força A · pernas e puxar', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Aquecimento (10 min)', items: ['5 min bike ergométrica ou trote leve', 'Mobilidade quadril + tornozelo: 5 min', '10 agachamentos sem peso + 10 lunges sem peso'] },
+          { sub: 'Bloco principal', items: ['Agachamento livre: 4×6 reps RPE 7 (deixa 3 reps na reserva)', 'RDL: 3×8 reps RPE 7', 'Walking lunges com halteres 16kg cada mão: 3×20 passos totais', 'Pull-up ou puxada alta: 4×6-8 reps RPE 7', 'Plank frontal: 3×45s', 'Dead bug: 3×10 cada lado'] },
+          { sub: 'Finalizador (5 min)', items: ['500m row @ damper 5, pace 1:55/500m, RPE 7'] }
+        ]
+      },
+      { d: 'Ter 05/05', name: 'Intervalado curto', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Aquecimento (12 min)', items: ['10 min trote em Z1 (6:30-7:00/km)', '4 acelerações de 50m progressivas (até 90%)'] },
+          { sub: 'Bloco principal — 6×400m em Z4 (4:30-4:45/km)', items: ['Cada tiro: ~1:50 a 1:55', 'Recuperação: 90s trote bem leve OU caminhada (não para parado)', '1 volta da pista por tiro'] },
+          { sub: 'Cooldown (10 min)', items: ['8 min trote leve Z1', '2 min caminhada'] }
+        ]
+      },
+      { d: 'Qua 06/05', name: 'Hyrox-specific (introdução)', type: 'hyrox', local: 'academia',
+        blocks: [
+          { sub: 'Aquecimento (10 min)', items: ['5 min esteira em Z1', '5 min mobilidade dinâmica + 4 acelerações curtas'] },
+          { sub: 'Bloco principal — 3 rounds (controlado, NÃO competitivo)', items: ['800m esteira em Z3 (12 km/h ≈ 5:00/km)', '20 wall balls 6kg (sem parar se possível)', '800m esteira em Z3', '10 burpee broad jump', 'Descanso 2 min entre rounds'] },
+          { sub: 'Acessórios extras (10 min)', items: ['Wall ball 6kg: 2×20 unbroken (técnica)', 'Burpee broad jump: 2×10 com 30s descanso'] },
+          { sub: 'Cooldown (8 min)', items: ['5 min trote bem leve', 'Alongamento isquios + panturrilha + quadril'] }
+        ]
+      },
+      { d: 'Qui 07/05', name: 'Threshold (tempo run)', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Aquecimento (15 min)', items: ['12 min trote progressivo Z1→Z2', '4 acelerações de 60m'] },
+          { sub: 'Bloco principal', items: ['2×8 minutos em Z3 (5:00-5:15/km)', 'Descanso ativo: 3 min trote Z1 entre blocos', 'Total: ~3.2 km em pace de threshold'] },
+          { sub: 'Cooldown (8 min)', items: ['Trote leve descendo gradual pra caminhada'] }
+        ]
+      },
+      { d: 'Sex 08/05', name: 'Força B + sustentação', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Sessão longa (~100 min)', items: ['Hoje é o dia mais carregado da semana', 'Faz lanche extra 30 min antes do treino'] },
+          { sub: 'Aquecimento (8 min)', items: ['Mobilidade ombro + torácica', 'Banda elástica: rotações externas, face pulls, band pull-aparts (10 cada)'] },
+          { sub: 'Bloco Força B', items: ['Supino reto barra: 3×6 RPE 7', 'Remada curvada barra: 3×8 RPE 7', 'Desenvolvimento militar com halteres: 3×8', 'Farmers walk: 3×40m com 30kg cada mão', 'Hollow hold: 3×30s', 'Side plank: 3×30s cada lado'] },
+          { sub: 'Sustentação (3 rounds, ritmo confortável)', items: ['50m farmers walk com 30kg', '20 walking lunges sem carga', '250m row @ damper 5 pace 2:00/500m', '1 min descanso entre rounds'] },
+          { sub: 'Finalizador (5 min)', items: ['500m SkiErg @ damper 6, pace 4:00/1k, RPE 7'] }
+        ]
+      },
+      { d: 'Sáb 09/05', name: 'Long run puro', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Long run (45 min)', items: ['45 min em Z2 puro (6:00-6:30/km) — uns 7-7.5 km', 'SE achar fácil, MANTÉM o pace. Não acelera. Teste de disciplina.', 'Sustentação foi pra sexta — sábado é só correr'] },
+          { sub: 'Cooldown (5 min)', items: ['Caminhada + alongamento leve isquios e panturrilha'] }
+        ]
+      },
+      { d: 'Dom 10/05', name: 'Off · descanso total', type: 'off', local: '',
+        blocks: [
+          { sub: 'Recovery', items: ['Caminhada leve 20-30 min se quiser sair de casa', 'Foco em recuperação: hidratação, alimentação, sono 8h+', 'Mobilidade leve OK (sem treino estruturado)'] }
+        ]
+      }
+    ]
+  },
+  {
+    n: 2, title: 'Consolidação',
+    dates: '11 mai → 17 mai', volume: '22 km (+10%)',
+    note: 'Mesmas sessões com leve incremento. Cargas de força sobem 2-5% se RPE caiu abaixo de 7 na semana 1.',
+    days: [
+      { d: 'Seg 11/05', name: 'Força A', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Aquecimento (10 min)', items: ['5 min bike + mobilidade', '10 agachamentos + 10 lunges sem peso'] },
+          { sub: 'Bloco principal', items: ['Agachamento livre: 4×6 (sobe 2-5kg se RPE 6)', 'RDL: 3×8', 'Walking lunges com halteres 20kg cada mão: 3×24 passos totais', 'Pull-up/puxada: 4×6-8', 'Plank: 3×50s', 'Dead bug: 3×12 cada lado'] },
+          { sub: 'Finalizador', items: ['600m row @ damper 5, pace 1:55/500m'] }
+        ]
+      },
+      { d: 'Ter 12/05', name: 'Intervalado', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Aquecimento (12 min)', items: ['10 min trote Z1 + 4 acelerações'] },
+          { sub: 'Bloco principal — 8×400m em Z4 (4:30-4:45/km)', items: ['Cada tiro: 1:50-1:55', 'Recuperação: 90s trote leve'] },
+          { sub: 'Cooldown (10 min)', items: ['8 min trote Z1 + caminhada'] }
+        ]
+      },
+      { d: 'Qua 13/05', name: 'Hyrox-specific', type: 'hyrox', local: 'academia',
+        blocks: [
+          { sub: 'Aquecimento (10 min)', items: ['5 min esteira Z1 + mobilidade + 4 acelerações'] },
+          { sub: 'Bloco principal — 4 rounds', items: ['800m esteira em Z3 (12 km/h)', '20 wall balls 6kg', '800m esteira em Z3', '10 burpee broad jump', 'Descanso 2 min'] },
+          { sub: 'Acessórios extras (10 min)', items: ['Wall ball 6kg: 2×25 unbroken', 'Burpee broad jump: 2×12'] },
+          { sub: 'Cooldown (8 min)', items: ['Trote leve + alongamento'] }
+        ]
+      },
+      { d: 'Qui 14/05', name: 'Threshold', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Aquecimento (15 min)', items: ['12 min trote Z1→Z2 + 4 acelerações'] },
+          { sub: 'Bloco principal', items: ['2×10 minutos em Z3 (5:00-5:15/km)', 'Descanso 3 min trote Z1'] },
+          { sub: 'Cooldown (8 min)', items: [] }
+        ]
+      },
+      { d: 'Sex 15/05', name: 'Força B + sustentação', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Aquecimento (8 min)', items: ['Mobilidade'] },
+          { sub: 'Bloco Força B', items: ['Supino reto: 3×6 (sobe carga se possível)', 'Remada curvada: 3×8', 'Desenvolvimento militar: 3×8', 'Farmers walk: 3×50m com 30kg cada mão', 'Hollow hold: 3×35s', 'Side plank: 3×35s cada lado'] },
+          { sub: 'Sustentação (4 rounds)', items: ['50m farmers walk 30kg', '20 walking lunges sem carga', '250m row pace 2:00/500m', '1 min descanso'] },
+          { sub: 'Finalizador', items: ['500m SkiErg @ damper 6, pace 3:55/1k'] }
+        ]
+      },
+      { d: 'Sáb 16/05', name: 'Long run puro', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Long run (50 min)', items: ['50 min em Z2 (6:00-6:30/km) — uns 8 km'] },
+          { sub: 'Cooldown (5 min)', items: ['Caminhada + alongamento leve'] }
+        ]
+      },
+      { d: 'Dom 17/05', name: 'Off', type: 'off', local: '',
+        blocks: [{ sub: 'Recovery', items: ['Descanso total ou caminhada leve 30 min'] }]
+      }
+    ]
+  },
+  {
+    n: 3, title: 'Sandbag entra em cena',
+    dates: '18 mai → 24 mai', volume: '24 km (+9%)',
+    note: 'Sandbag lunges entra com 30kg. Sobe distância dos tiros.',
+    days: [
+      { d: 'Seg 18/05', name: 'Força A', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Bloco principal', items: ['Agachamento livre: 4×5 (carga mais alta, RPE 7-8)', 'RDL: 4×8', 'Sandbag lunges 30kg: 3×20m (ida-volta no espaço de 20-50m)', 'Pull-up/puxada: 4×8', 'Plank: 3×60s', 'Dead bug: 3×12 cada lado'] },
+          { sub: 'Finalizador', items: ['750m row @ damper 5, pace 1:55/500m'] }
+        ]
+      },
+      { d: 'Ter 19/05', name: 'Intervalado (sobe distância)', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Aquecimento (12 min)', items: [] },
+          { sub: 'Bloco principal — 5×600m em Z4 (4:30-4:45/km)', items: ['Cada tiro: ~2:45-2:50', 'Recuperação: 2 min trote leve'] },
+          { sub: 'Cooldown (10 min)', items: [] }
+        ]
+      },
+      { d: 'Qua 20/05', name: 'Hyrox-specific (entra sandbag)', type: 'hyrox', local: 'academia',
+        blocks: [
+          { sub: 'Aquecimento (10 min)', items: [] },
+          { sub: 'Bloco principal — 4 rounds', items: ['1km esteira em Z3 (12 km/h)', '20 wall balls 6kg', '20m sandbag lunges 30kg', '10 burpee broad jump', 'Descanso 90s'] },
+          { sub: 'Acessórios extras (10 min)', items: ['Wall ball 6kg: 2×30 unbroken', 'Burpee broad jump: 2×15'] },
+          { sub: 'Cooldown (8 min)', items: [] }
+        ]
+      },
+      { d: 'Qui 21/05', name: 'Threshold', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Aquecimento (15 min)', items: [] },
+          { sub: 'Bloco principal', items: ['1×18 min contínuos em Z3 (5:00-5:15/km)', 'Total: ~3.5 km em threshold sem parar'] },
+          { sub: 'Cooldown (8 min)', items: [] }
+        ]
+      },
+      { d: 'Sex 22/05', name: 'Força B + sustentação', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Bloco Força B', items: ['Supino reto: 3×6', 'Remada curvada: 3×8', 'Desenvolvimento militar: 3×8', 'Farmers walk: 3×60m com 30kg cada mão', 'Hollow hold: 3×40s', 'Side plank: 3×40s cada lado'] },
+          { sub: 'Sustentação (5 rounds)', items: ['60m farmers walk 30kg', '20 walking lunges sem carga', '300m row pace 2:00/500m', '1 min descanso'] },
+          { sub: 'Finalizador', items: ['750m SkiErg @ damper 6, pace 4:00/1k'] }
+        ]
+      },
+      { d: 'Sáb 23/05', name: 'Long run puro', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Long run (60 min)', items: ['60 min em Z2 (6:00-6:30/km) — ~10 km', 'MANTÉM Z2 mesmo se sentir leve'] },
+          { sub: 'Cooldown (5 min)', items: [] }
+        ]
+      },
+      { d: 'Dom 24/05', name: 'Off', type: 'off', local: '',
+        blocks: [{ sub: 'Recovery', items: ['Descanso total. Avalia honesto: alguma dor articular? Canela? Joelho? Avisa.'] }]
+      }
+    ]
+  },
+  {
+    n: 4, title: 'Volume e variedade',
+    dates: '25 mai → 31 mai', volume: '27 km (+12%)',
+    note: 'Pico relativo desta primeira metade. Long run cresce. Hyrox-specific fica mais denso.',
+    days: [
+      { d: 'Seg 25/05', name: 'Força A', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Bloco principal', items: ['Agachamento frontal (front squat): 4×6', 'RDL: 4×8', 'Sandbag lunges 30kg: 3×20m', 'Pull-up/puxada: 4×8-10', 'Hanging leg raise: 3×10', 'Hollow rocks: 3×20'] },
+          { sub: 'Finalizador', items: ['1000m row @ damper 5, pace 1:55/500m'] }
+        ]
+      },
+      { d: 'Ter 26/05', name: 'Intervalado misto', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Aquecimento (12 min)', items: [] },
+          { sub: 'Bloco principal — escada descendente', items: ['1000m em Z3-Z4 (4:50/km)', '2 min descanso', '800m em Z4 (4:40/km)', '2 min descanso', '600m em Z4 (4:35/km)', '2 min descanso', '400m em Z4-Z5 (4:25/km)'] },
+          { sub: 'Cooldown (10 min)', items: [] }
+        ]
+      },
+      { d: 'Qua 27/05', name: 'Hyrox-specific compromised', type: 'hyrox', local: 'academia',
+        blocks: [
+          { sub: 'Aquecimento (10 min)', items: [] },
+          { sub: 'Bloco principal — 3 rounds', items: ['1km esteira em Z3-Z4 (12-12.5 km/h, mais forte)', '1000m SkiErg pace 4:05/1k', '1km esteira em Z3-Z4', '30 wall balls 6kg', 'Descanso 2 min'] },
+          { sub: 'Acessório extra (5 min)', items: ['Wall ball 6kg: 50 unbroken (1 set, foco em manter ritmo)'] },
+          { sub: 'Cooldown (10 min)', items: [] }
+        ]
+      },
+      { d: 'Qui 28/05', name: 'Threshold', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Aquecimento (15 min)', items: [] },
+          { sub: 'Bloco principal', items: ['2×12 min em Z3 (5:00-5:10/km, mais rápido que sem 2)', 'Descanso 3 min'] },
+          { sub: 'Cooldown (8 min)', items: [] }
+        ]
+      },
+      { d: 'Sex 29/05', name: 'Força B + sustentação', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Bloco Força B', items: ['Supino reto: 3×5 (mais carga)', 'Remada curvada: 3×8', 'Desenvolvimento militar: 3×8', 'Farmers walk: 3×80m com 30kg', 'Hollow hold: 3×45s', 'Side plank: 3×45s cada lado'] },
+          { sub: 'Sustentação (4 rounds)', items: ['80m farmers walk 30kg', '20m sandbag lunges 30kg', '300m row pace 2:00/500m', '90s descanso'] },
+          { sub: 'Finalizador', items: ['1000m SkiErg @ damper 6, pace 4:00/1k'] }
+        ]
+      },
+      { d: 'Sáb 30/05', name: 'Long run puro', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Long run (70 min)', items: ['70 min em Z2 (6:00-6:30/km) — ~11 km'] },
+          { sub: 'Cooldown (5 min)', items: [] }
+        ]
+      },
+      { d: 'Dom 31/05', name: 'Off', type: 'off', local: '',
+        blocks: [{ sub: 'Recovery', items: ['Mês 1 completo. Anota: pernas? sono? motivação?'] }]
+      }
+    ]
+  },
+  {
+    n: 5, title: 'Recuo planejado (deload)',
+    dates: '01 jun → 07 jun', volume: '23 km (-15%)',
+    note: 'Volume cai 15%, intensidade mantém. Permite supercompensação antes do checkpoint.',
+    days: [
+      { d: 'Seg 01/06', name: 'Força A', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Bloco principal', items: ['Agachamento frontal: 3×5 (mantém carga, menos volume)', 'RDL: 3×8', 'Sandbag lunges 30kg: 3×20m', 'Pull-up/puxada: 3×8', 'Plank: 3×60s'] },
+          { sub: 'Finalizador', items: ['500m row pace 1:55/500m'] }
+        ]
+      },
+      { d: 'Ter 02/06', name: 'Intervalado curto e intenso', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Aquecimento (12 min)', items: [] },
+          { sub: 'Bloco principal — 6×400m em Z4-Z5 (4:25-4:30/km)', items: ['Cada tiro: ~1:45-1:50', 'Recuperação: 2 min completa', 'Foco em qualidade, pace mais agressivo'] },
+          { sub: 'Cooldown (10 min)', items: [] }
+        ]
+      },
+      { d: 'Qua 03/06', name: 'Hyrox-specific deload', type: 'hyrox', local: 'academia',
+        blocks: [
+          { sub: 'Aquecimento (10 min)', items: [] },
+          { sub: 'Bloco principal — 3 rounds (volume menor)', items: ['800m esteira em Z3 (12 km/h)', '20 wall balls 6kg', '20m sandbag lunges 30kg', 'Descanso 2 min'] },
+          { sub: 'Cooldown (10 min)', items: [] }
+        ]
+      },
+      { d: 'Qui 04/06', name: 'Threshold curto', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Aquecimento (12 min)', items: [] },
+          { sub: 'Bloco principal', items: ['2×8 min em Z3 (5:00/km), 3 min descanso'] },
+          { sub: 'Cooldown (8 min)', items: [] }
+        ]
+      },
+      { d: 'Sex 05/06', name: 'Força B + sustentação leve (deload)', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Bloco Força B (volume reduzido)', items: ['Supino reto: 3×5', 'Remada curvada: 3×8', 'Desenvolvimento militar: 3×8', 'Farmers walk: 3×60m com 30kg', 'Hollow hold: 3×40s'] },
+          { sub: 'Sustentação leve (3 rounds)', items: ['50m farmers walk 30kg', '200m row pace 2:00/500m', '1 min descanso'] }
+        ]
+      },
+      { d: 'Sáb 06/06', name: 'Long run mais curto', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Long run (50 min)', items: ['50 min em Z2 — ~8 km'] },
+          { sub: 'Cooldown (5 min)', items: [] }
+        ]
+      },
+      { d: 'Dom 07/06', name: 'Off + preparação semana 6', type: 'off', local: '',
+        blocks: [{ sub: 'Recovery', items: ['Descanso total', 'Hidratação alta', 'Confirma equipamentos pro checkpoint de sábado 13/06'] }]
+      }
+    ]
+  },
+  {
+    n: 6, title: 'Checkpoint Hyrox parcial',
+    dates: '08 jun → 14 jun', volume: '26 km (afinamento)',
+    note: 'Semana de afinamento pro teste de sábado 13/06. Sábado é o checkpoint que define ajustes da Fase 2.',
+    days: [
+      { d: 'Seg 08/06', name: 'Força A (manutenção)', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Bloco principal', items: ['Agachamento frontal: 3×5', 'RDL: 3×6', 'Sandbag lunges 25kg (carga reduzida pré-teste): 2×20m', 'Pull-up/puxada: 3×6', 'Plank: 3×45s'] },
+          { sub: 'Sem finalizador esta semana', items: [] }
+        ]
+      },
+      { d: 'Ter 09/06', name: 'Intervalado leve', type: 'corrida', local: 'pista',
+        blocks: [
+          { sub: 'Aquecimento (12 min)', items: [] },
+          { sub: 'Bloco principal — 5×400m em Z4 (4:30/km)', items: ['Recuperação: 2 min completa', 'Foco em fluidez, não esforço máximo'] },
+          { sub: 'Cooldown (10 min)', items: [] }
+        ]
+      },
+      { d: 'Qua 10/06', name: 'Sessão leve', type: 'hyrox', local: 'academia',
+        blocks: [
+          { sub: 'Bloco único (45 min)', items: ['30 min esteira em Z2 (10 km/h ≈ 6:00/km) — ~5 km', 'Pós-corrida: 3×25 wall balls (sem time pressure)'] }
+        ]
+      },
+      { d: 'Qui 11/06', name: 'Off', type: 'off', local: '',
+        blocks: [{ sub: 'Recovery', items: ['Descanso total', 'Hidratação alta, sono de qualidade', 'Sem treino nenhum'] }]
+      },
+      { d: 'Sex 12/06', name: 'Ativação', type: 'forca', local: 'academia',
+        blocks: [
+          { sub: 'Bloco único (30 min)', items: ['10 min trote leve Z1', '4 acelerações de 80m a 90% velocidade', '5 min mobilidade dinâmica', '5 min foam roller', 'Sem cargas, sem esforço. Só preparar o corpo pra amanhã.'] }
+        ]
+      },
+      { d: 'Sáb 13/06', name: 'CHECKPOINT · Hyrox parcial', type: 'hyrox', local: 'academia',
+        blocks: [
+          { sub: 'TESTE OFICIAL — trate como simulação de prova', items: [] },
+          { sub: 'Aquecimento (15 min)', items: ['10 min trote progressivo Z1→Z2', '4 acelerações de 80m', 'Mobilidade rápida + 10 wall balls de aquecimento (não conta)'] },
+          { sub: 'Bloco do checkpoint (cronometrado, sem parar)', items: ['1km corrida em ritmo de prova (Z3 forte ~4:50-5:00/km)', '1000m SkiErg @ damper 6, pace 4:00-4:10/1k', '1km corrida', '60 walking lunges com 2×20kg (substituto sled push)', '1km corrida', '30 remadas pesadas com barra 30kg (substituto sled pull)', '1km corrida', '40m burpee broad jump'] },
+          { sub: 'Cooldown (15 min)', items: ['5 min trote bem leve', '10 min alongamento + hidratação'] },
+          { sub: 'O que registrar', items: ['Tempo total', 'Tempo de cada estação separado se possível', 'Pace de cada 1km de corrida', 'RPE final (0-10)', 'Em qual estação a fadiga apertou primeiro', 'Sintomas (canela, joelho, panturrilha)'] }
+        ]
+      },
+      { d: 'Dom 14/06', name: 'Off + reflexão', type: 'off', local: '',
+        blocks: [{ sub: 'Recovery', items: ['Descanso completo', 'Almoço farto', 'Anota sensações da semana inteira pra revisarmos'] }]
+      }
+    ]
+  }
+];
+
+// ==================== STATE ====================
+const STORAGE_KEY = 'hyrox_open_v1';
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+let currentDay = null;
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  showToast('Salvo');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1700);
+}
+
+function getDayKey(weekN, dayIdx) { return `w${weekN}_d${dayIdx}`; }
+function getDayData(weekN, dayIdx) { return state[getDayKey(weekN, dayIdx)] || null; }
+
+// ==================== RENDER ====================
+function render() {
+  renderCountdown();
+  renderOverall();
+  renderWeeks();
+}
+
+function renderCountdown() {
+  const now = new Date();
+  const days = Math.max(0, Math.ceil((PROVA_DATE - now) / 86400000));
+  document.getElementById('countdownNum').textContent = days;
+  // determinar fase atual
+  const start = new Date('2026-05-04');
+  const diff = Math.floor((now - start) / 86400000);
+  let phase = 'Pré-início';
+  if (diff >= 0 && diff < 42) phase = `Fase 1 · Base · Sem ${Math.min(6, Math.floor(diff/7)+1)}`;
+  else if (diff >= 42 && diff < 91) phase = 'Fase 2 · Específico';
+  else if (diff >= 91 && diff < 140) phase = 'Fase 3 · Race pace';
+  else if (diff >= 140) phase = 'Fase 4 · Taper';
+  document.getElementById('phasePill').textContent = phase;
+}
+
+function renderOverall() {
+  let total = 0, done = 0, partial = 0;
+  PLAN.forEach(week => week.days.forEach((d, i) => {
+    if (d.type === 'off') return;
+    total++;
+    const data = getDayData(week.n, i);
+    if (data?.status === 'done') done++;
+    else if (data?.status === 'partial') partial++;
+  }));
+  const pct = total ? Math.round(((done + partial * 0.5) / total) * 100) : 0;
+  document.getElementById('overallFill').style.width = pct + '%';
+  document.getElementById('adhText').textContent = `${done + partial}/${total} · ${pct}% aderência`;
+}
+
+function renderWeeks() {
+  const list = document.getElementById('weekList');
+  list.innerHTML = PLAN.map(week => {
+    const dotsHtml = week.days.map((d, i) => {
+      if (d.type === 'off') return '<span class="week-dot" style="background:transparent;border:1px dashed var(--border-strong)"></span>';
+      const data = getDayData(week.n, i);
+      let cls = '';
+      if (data?.status === 'done') cls = 'done';
+      else if (data?.status === 'partial') cls = 'partial';
+      else if (data?.status === 'skipped') cls = 'skipped';
+      return `<span class="week-dot ${cls}"></span>`;
+    }).join('');
+    
+    const trainingDays = week.days.filter(d => d.type !== 'off');
+    const completed = trainingDays.filter((d, i) => {
+      const idx = week.days.indexOf(d);
+      return getDayData(week.n, idx)?.status === 'done';
+    }).length;
+    
+    const hasData = week.days.some((d, i) => getDayData(week.n, i));
+    const isComplete = completed === trainingDays.length;
+    
+    return `
+      <article class="week-card ${hasData ? 'has-data' : ''} ${isComplete ? 'complete' : ''}" id="week-${week.n}">
+        <header class="week-head" onclick="toggleWeek(${week.n})">
+          <div class="week-num">${String(week.n).padStart(2, '0')}</div>
+          <div class="week-info">
+            <div class="week-title">${week.title}</div>
+            <div class="week-meta">${week.dates} · ${week.volume}</div>
+          </div>
+          <div class="week-progress">${dotsHtml}</div>
+          <svg class="chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 5l6 5-6 5"/></svg>
+        </header>
+        <div class="week-body">
+          <div class="day-list">
+            ${week.days.map((d, i) => renderDayItem(week.n, i, d)).join('')}
+          </div>
+          <div class="week-footer">
+            <button class="btn-summary" onclick="event.stopPropagation(); openSumModal(${week.n})">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h12M2 8h12M2 13h8"/></svg>
+              Gerar resumo da semana ${week.n}
+            </button>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+function renderDayItem(weekN, dayIdx, d) {
+  const data = getDayData(weekN, dayIdx);
+  const status = data?.status || (d.type === 'off' ? 'off' : '');
+  const dayLetter = d.d.split(' ')[0].substring(0, 3);
+  let icon = dayLetter;
+  if (status === 'done') icon = '✓';
+  else if (status === 'partial') icon = '∼';
+  else if (status === 'skipped') icon = '✕';
+  
+  const typeLabels = { forca: 'Força', corrida: 'Corrida', hyrox: 'Hyrox', off: 'Descanso' };
+  
+  return `
+    <div class="day-item ${status}" onclick="openDayModal(${weekN}, ${dayIdx})">
+      <div class="day-status">${icon}</div>
+      <div class="day-info">
+        <div class="day-name">${d.name}</div>
+        <div class="day-type tt-${d.type}">${d.d.split(' ')[0]} · ${typeLabels[d.type]}${d.local ? ' · ' + d.local : ''}</div>
+      </div>
+      <div class="day-arrow">›</div>
+    </div>
+  `;
+}
+
+function toggleWeek(n) {
+  const card = document.getElementById('week-' + n);
+  card.classList.toggle('open');
+}
+
+// ==================== DAY MODAL ====================
+function openDayModal(weekN, dayIdx) {
+  const week = PLAN.find(w => w.n === weekN);
+  const day = week.days[dayIdx];
+  currentDay = { weekN, dayIdx, day };
+  
+  document.getElementById('dayTitle').textContent = day.name;
+  document.getElementById('daySubtitle').textContent = `Semana ${weekN} · ${day.d}${day.local ? ' · ' + day.local : ''}`;
+  
+  let html = '';
+  if (day.local) html += `<div class="local-tag ${day.local}">${day.local === 'pista' ? '◯' : day.local === 'academia' ? '◼' : '◧'} ${day.local}</div>`;
+  
+  if (day.type === 'off') {
+    html += `<div class="off-msg">Dia de descanso</div>`;
+  }
+  
+  day.blocks.forEach(b => {
+    html += `<div class="train-section">`;
+    html += `<div class="train-sub">${b.sub}</div>`;
+    if (b.items.length) {
+      html += `<ul class="train-list">${b.items.map(it => `<li>${it}</li>`).join('')}</ul>`;
+    }
+    html += `</div>`;
+  });
+  
+  // formulário de registro
+  if (day.type !== 'off') {
+    const data = getDayData(weekN, dayIdx) || {};
+    html += `
+      <div class="reg-section">
+        <div class="train-sub">Registro</div>
+        
+        <div class="status-row">
+          <button class="status-btn done ${data.status === 'done' ? 'active' : ''}" data-status="done" onclick="setStatus('done')">
+            <span class="ico">✓</span><span>Concluído</span>
+          </button>
+          <button class="status-btn partial ${data.status === 'partial' ? 'active' : ''}" data-status="partial" onclick="setStatus('partial')">
+            <span class="ico">∼</span><span>Parcial</span>
+          </button>
+          <button class="status-btn skipped ${data.status === 'skipped' ? 'active' : ''}" data-status="skipped" onclick="setStatus('skipped')">
+            <span class="ico">✕</span><span>Faltei</span>
+          </button>
+        </div>
+        
+        <div id="regFields"></div>
+        
+        <button class="btn-save" onclick="saveDay()">Salvar registro</button>
+        <div class="save-note">salvo localmente no navegador</div>
+      </div>
+    `;
+  }
+  
+  document.getElementById('dayBody').innerHTML = html;
+  if (day.type !== 'off') renderRegFields();
+  document.getElementById('dayModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function setStatus(s) {
+  document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.status-btn[data-status="${s}"]`).classList.add('active');
+  renderRegFields();
+}
+
+function renderRegFields() {
+  const activeBtn = document.querySelector('.status-btn.active');
+  const status = activeBtn?.dataset.status;
+  const fieldsEl = document.getElementById('regFields');
+  if (!fieldsEl) return;
+  
+  const data = getDayData(currentDay.weekN, currentDay.dayIdx) || {};
+  const isRun = currentDay.day.type === 'corrida';
+  const isStrength = currentDay.day.type === 'forca';
+  const isHyrox = currentDay.day.type === 'hyrox';
+  
+  let html = '';
+  
+  if (status === 'skipped') {
+    html += `
+      <div class="field">
+        <label class="field-label">Motivo (opcional)</label>
+        <textarea class="field-textarea" id="f_motivo" placeholder="Doença, trabalho, cansaço, sem motivação...">${data.motivo || ''}</textarea>
+      </div>
+    `;
+  } else if (status === 'done' || status === 'partial') {
+    // RPE
+    html += `<div class="field">
+      <label class="field-label">RPE (esforço percebido)</label>
+      <div class="rpe-row">${[0,1,2,3,4,5,6,7,8,9,10].map(n => 
+        `<button class="rpe-btn ${data.rpe === n ? 'active' : ''}" data-rpe="${n}" onclick="setRpe(${n})">${n}</button>`).join('')}</div>
+      <div class="rpe-meta">0 = nada · 5 = moderado · 7 = duro · 10 = máximo</div>
+    </div>`;
+    
+    // Campos específicos por tipo
+    if (isRun) {
+      html += `
+        <div class="field-pair">
+          <div class="field">
+            <label class="field-label">Pace médio</label>
+            <input class="field-input mono" id="f_pace" placeholder="5:30 /km" value="${data.pace || ''}">
+          </div>
+          <div class="field">
+            <label class="field-label">Distância</label>
+            <input class="field-input mono" id="f_dist" placeholder="6.5 km" value="${data.dist || ''}">
+          </div>
+        </div>
+      `;
+    }
+    
+    if (isStrength) {
+      html += `
+        <div class="field">
+          <label class="field-label">Cargas vs semana anterior</label>
+          <div class="status-row" style="grid-template-columns:1fr 1fr 1fr">
+            <button class="status-btn ${data.cargas === 'subiu' ? 'active done' : ''}" onclick="setCargas('subiu')">↑ Subiu</button>
+            <button class="status-btn ${data.cargas === 'manteve' ? 'active partial' : ''}" onclick="setCargas('manteve')">→ Manteve</button>
+            <button class="status-btn ${data.cargas === 'desceu' ? 'active skipped' : ''}" onclick="setCargas('desceu')">↓ Desceu</button>
+          </div>
+        </div>
+      `;
+    }
+    
+    if (isHyrox) {
+      html += `
+        <div class="field">
+          <label class="field-label">Tempo total da sessão</label>
+          <input class="field-input mono" id="f_tempo" placeholder="78 min" value="${data.tempo || ''}">
+        </div>
+      `;
+    }
+    
+    // Dor / sintoma
+    html += `
+      <div class="field">
+        <label class="field-label">Dor ou sintoma</label>
+        <input class="field-input" id="f_dor" placeholder="Ex: canela esquerda leve · joelho ok · nada" value="${data.dor || ''}">
+      </div>
+      <div class="field">
+        <label class="field-label">Observações livres</label>
+        <textarea class="field-textarea" id="f_obs" placeholder="Como foi, o que sentiu, algo importante pra ajustar...">${data.obs || ''}</textarea>
+      </div>
+    `;
+  }
+  
+  fieldsEl.innerHTML = html;
+}
+
+function setRpe(n) {
+  document.querySelectorAll('.rpe-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.rpe-btn[data-rpe="${n}"]`).classList.add('active');
+}
+
+function setCargas(c) {
+  const btns = document.querySelectorAll('#regFields .status-btn');
+  btns.forEach(b => b.classList.remove('active', 'done', 'partial', 'skipped'));
+  const labels = ['subiu', 'manteve', 'desceu'];
+  const cls = ['done', 'partial', 'skipped'];
+  const idx = labels.indexOf(c);
+  if (idx >= 0) {
+    btns[idx].classList.add('active', cls[idx]);
+    btns[idx].dataset.cargas = c;
+  }
+}
+
+function saveDay() {
+  const activeBtn = document.querySelector('.status-row .status-btn.active');
+  if (!activeBtn) {
+    showToast('Selecione um status');
+    return;
+  }
+  const status = activeBtn.dataset.status;
+  const key = getDayKey(currentDay.weekN, currentDay.dayIdx);
+  const data = { status, savedAt: new Date().toISOString() };
+  
+  // RPE
+  const rpeBtn = document.querySelector('.rpe-btn.active');
+  if (rpeBtn) data.rpe = parseInt(rpeBtn.dataset.rpe);
+  
+  // Cargas
+  const cargasBtn = document.querySelector('#regFields .status-btn.active');
+  if (cargasBtn?.dataset.cargas) data.cargas = cargasBtn.dataset.cargas;
+  
+  // Outros campos
+  ['pace', 'dist', 'tempo', 'dor', 'obs', 'motivo'].forEach(f => {
+    const el = document.getElementById('f_' + f);
+    if (el && el.value.trim()) data[f] = el.value.trim();
+  });
+  
+  state[key] = data;
+  save();
+  closeDayModal();
+  render();
+}
+
+function closeDayModal() {
+  document.getElementById('dayModal').classList.remove('open');
+  document.body.style.overflow = '';
+  currentDay = null;
+}
+
+// ==================== SUMMARY MODAL ====================
+function openSumModal(weekN) {
+  const week = PLAN.find(w => w.n === weekN);
+  const trainingDays = week.days.filter(d => d.type !== 'off');
+  const totalTrain = trainingDays.length;
+  
+  let done = 0, partial = 0, skipped = 0, untouched = 0;
+  let rpeSum = 0, rpeCount = 0;
+  const dayLog = [];
+  
+  week.days.forEach((d, i) => {
+    const data = getDayData(weekN, i);
+    if (d.type === 'off') return;
+    if (!data) { untouched++; return; }
+    if (data.status === 'done') done++;
+    else if (data.status === 'partial') partial++;
+    else if (data.status === 'skipped') skipped++;
+    if (data.rpe !== undefined) { rpeSum += data.rpe; rpeCount++; }
+    dayLog.push({ d, data, idx: i });
+  });
+  
+  const avgRpe = rpeCount ? (rpeSum / rpeCount).toFixed(1) : '—';
+  
+  // Adherence panel
+  document.getElementById('sumAdherence').innerHTML = `
+    <div class="adh-stat"><div class="adh-num success">${done}</div><div class="adh-lbl">concluídos</div></div>
+    <div class="adh-stat"><div class="adh-num partial">${partial}</div><div class="adh-lbl">parciais</div></div>
+    <div class="adh-stat"><div class="adh-num">${skipped}</div><div class="adh-lbl">faltas</div></div>
+    <div class="adh-stat"><div class="adh-num">${avgRpe}</div><div class="adh-lbl">RPE médio</div></div>
+  `;
+  
+  document.getElementById('sumSubtitle').textContent = `Semana ${weekN} · ${week.dates}`;
+  
+  // Markdown text
+  let md = `# Resumo Semana ${weekN} — ${week.title}\n`;
+  md += `**Período:** ${week.dates}\n`;
+  md += `**Volume planejado:** ${week.volume}\n\n`;
+  md += `## Aderência\n`;
+  md += `- Concluídos: ${done}/${totalTrain}\n`;
+  md += `- Parciais: ${partial}\n`;
+  md += `- Faltas: ${skipped}\n`;
+  md += `- Não registrados: ${untouched}\n`;
+  md += `- RPE médio: ${avgRpe}\n\n`;
+  md += `## Detalhes por dia\n`;
+  
+  week.days.forEach((d, i) => {
+    if (d.type === 'off') return;
+    const data = getDayData(weekN, i);
+    md += `\n### ${d.d} · ${d.name}\n`;
+    if (!data) {
+      md += `- Status: não registrado\n`;
+      return;
+    }
+    md += `- Status: **${data.status}**\n`;
+    if (data.rpe !== undefined) md += `- RPE: ${data.rpe}\n`;
+    if (data.pace) md += `- Pace: ${data.pace}\n`;
+    if (data.dist) md += `- Distância: ${data.dist}\n`;
+    if (data.tempo) md += `- Tempo total: ${data.tempo}\n`;
+    if (data.cargas) md += `- Cargas: ${data.cargas}\n`;
+    if (data.dor) md += `- Dor/sintoma: ${data.dor}\n`;
+    if (data.obs) md += `- Obs: ${data.obs}\n`;
+    if (data.motivo) md += `- Motivo da falta: ${data.motivo}\n`;
+  });
+  
+  // Resumo geral
+  md += `\n## Como me sinto no geral\n`;
+  md += `_(adicione aqui antes de enviar: pernas, sono, motivação, qualquer coisa importante)_\n`;
+  
+  document.getElementById('sumContent').textContent = md;
+  document.getElementById('sumModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSumModal() {
+  document.getElementById('sumModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function copySum() {
+  const txt = document.getElementById('sumContent').textContent;
+  navigator.clipboard.writeText(txt).then(() => {
+    showToast('Copiado · cola no chat');
+  }).catch(() => {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copiado · cola no chat');
+  });
+}
+
+function shareSum() {
+  const txt = document.getElementById('sumContent').textContent;
+  if (navigator.share) {
+    navigator.share({ title: 'Resumo Hyrox', text: txt }).catch(() => {});
+  } else {
+    copySum();
+  }
+}
+
+// fechar modais clicando no overlay
+document.getElementById('dayModal').addEventListener('click', (e) => {
+  if (e.target.id === 'dayModal') closeDayModal();
+});
+document.getElementById('sumModal').addEventListener('click', (e) => {
+  if (e.target.id === 'sumModal') closeSumModal();
+});
+
+// ESC pra fechar
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeDayModal();
+    closeSumModal();
+  }
+});
+
+// init
+render();
+
+// abre semana atual baseada na data
+const now = new Date();
+const start = new Date('2026-05-04');
+const weekIdx = Math.floor((now - start) / (7 * 86400000));
+if (weekIdx >= 0 && weekIdx < 6) {
+  setTimeout(() => toggleWeek(weekIdx + 1), 200);
+}
+</script>
+
+</body>
+</html>
